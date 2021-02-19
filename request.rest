@@ -1,0 +1,24 @@
+GET http://localhost:3001/api/persons
+
+###
+GET http://localhost:3001/api/persons/6
+
+###
+GET http://localhost:3001/info
+
+
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "LeonelJ",
+    "number": "49496664949"
+}
+
+###
+DELETE http://localhost:3001/api/persons/4
+
+
+###
+HEAD http://localhost:3001/api/persons
