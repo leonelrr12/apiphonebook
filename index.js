@@ -83,9 +83,10 @@ app.post('/api/persons', (request, response) => {
     }
 
     const name = persons.map(p => p.name)
-    if(name.includes(body.name)){
+    const phone = persons.map(p => p.number)
+    if(name.includes(body.name) && phone.includes(body.number)){
         return response.status(400).json({
-            error: 'Name must be unique!'
+            error: 'Name and Number must be unique!'
         })
     }
 
