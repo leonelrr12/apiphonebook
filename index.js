@@ -47,9 +47,21 @@ const generateId = () => {
 }
 
 
+app.get('/info', (request, response) => {
+    const people = persons.length
+    response.send(`<P>Phonebook has info for ${people} people</p><p>${new Date()}</>`)
+})
+
+
 app.get('/', (request, response) => {
     response.send("Hello Wrold !!!")
 })
+
+
+app.get('/api/persons', (request, response) => {
+    response.json(persons)
+})
+
 
 app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
@@ -60,16 +72,6 @@ app.get('/api/persons/:id', (req, res) => {
     } else {
         res.status(400).end()
     }
-})
-
-app.get('/info', (request, response) => {
-    const people = persons.length
-    response.send(`<P>Phonebook has info for ${people} people</p><p>${new Date()}</>`)
-})
-
-
-app.get('/api/persons', (request, response) => {
-    response.json(persons)
 })
 
 
@@ -84,7 +86,8 @@ app.post('/api/persons', (request, response) => {
 
     const name = persons.map(p => p.name)
     const phone = persons.map(p => p.number)
-    if(name.includes(body.name) && phone.includes(body.number)){
+    console.log(name, body.name, phone, body.number)
+    if(name.includes(body.name) && phone.includes(body.number)) {
         return response.status(400).json({
             error: 'Name and Number must be unique!'
         })
@@ -102,6 +105,14 @@ app.post('/api/persons', (request, response) => {
 })
 
 
+app.put('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const body = req.body
+    persons = persons.map(p => p.id === id ? body : p)
+    res.json(persons)
+})
+
+
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
 
@@ -109,13 +120,16 @@ app.delete('/api/persons/:id', (req, res) => {
     res.json(persons)
 })
 
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({
         error: 'Unknown endpoint!'
     })
 }
 
+
 app.use(unknownEndpoint)
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
